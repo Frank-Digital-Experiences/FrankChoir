@@ -82,6 +82,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     revalidate: 1,
   }
 }
+
 const songPage = ({ page }) => {
   if (!page?.metadata) {
     if (!page?.songs) {

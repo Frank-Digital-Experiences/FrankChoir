@@ -8,11 +8,15 @@ const NotFound: React.FC = (songs) => {
   return (
     <StyledDiv>
       <span>frank choir</span>
-      {Object.values(songs).map((song) => {
+      {Object.values(songs).map((song, i) => {
         const { slug, title } = song?.fields
         console.log(slug)
 
-        return <a href={"/" + slug}>{title}</a>
+        return (
+          <a key={i} href={"/" + slug}>
+            {title}
+          </a>
+        )
       })}
     </StyledDiv>
   )

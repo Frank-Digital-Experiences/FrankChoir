@@ -40,8 +40,9 @@ export const Track: React.FC<TrackProps> = ({
         },
       })
       const updateProgressMarker = () => {
-        const currentTime = soundRef.current.seek() // Get the current playback position
-        console.log(currentTime)
+        if (soundRef.current) {
+          const currentTime = soundRef.current.seek() // Get the current playback position
+        }
 
         // Update the position of the progress marker on your UI
         // For example:

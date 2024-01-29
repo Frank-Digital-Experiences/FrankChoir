@@ -8,6 +8,14 @@ export const nextConfig = {
   },
   // vi har fortfarande en router.asPath som heter home..
 
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,

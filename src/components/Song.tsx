@@ -11,7 +11,7 @@ type SongProps = {
 export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [songDuration, setSongDuration] = useState(0)
-  const [region, setRegion] = useState<Region>({})
+  const [region, setRegion] = useState<Region>({ start: 0, end: 0 })
   const [regionMarker, setRegionMarker] = useState<RegionMarker>({
     left: 0,
     right: 0,
@@ -66,10 +66,11 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
         ...prevState,
         left: offsetX,
       }))
-      setRegion((prevState) => ({
-        ...prevState,
-        start: currentPosition * 1000,
-      }))
+      currentPosition &&
+        setRegion((prevState) => ({
+          ...prevState,
+          start: currentPosition * 1000,
+        }))
     }
   }
 
@@ -85,7 +86,11 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
       const currentPosition =
         (offsetX / waveformRef.current!.offsetWidth) * duration
       wavesurfer.seekTo(currentPosition)
-      setRegion((prevState) => ({ ...prevState, end: currentPosition * 1000 }))
+      currentPosition &&
+        setRegion((prevState) => ({
+          ...prevState,
+          end: currentPosition * 1000,
+        }))
     }
   }
 
@@ -124,8 +129,8 @@ type RegionMarker = {
 }
 
 type Region = {
-  start?: number
-  end?: number
+  start: number
+  end: number
 }
 
 type StyledWaveFormProps = {
