@@ -8,6 +8,24 @@ import { Song } from "../components/Song"
 import NotFound from "./404"
 
 export type SlugCollection = (readonly [string, string])[]
+
+export const page = ({ page }) => {
+  if (!page?.metadata) {
+    if (!page?.songs) {
+      return <NotFound />
+    } else {
+      return <Home {...page.songs} />
+    }
+  }
+  return (
+    <main>
+      <Song {...page.fields} />
+    </main>
+  )
+}
+
+export default page
+
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || "",
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
@@ -82,20 +100,3 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     revalidate: 1,
   }
 }
-
-const songPage = ({ page }) => {
-  if (!page?.metadata) {
-    if (!page?.songs) {
-      return <NotFound />
-    } else {
-      return <Home {...page.songs} />
-    }
-  }
-  return (
-    <main>
-      <Song {...page.fields} />
-    </main>
-  )
-}
-
-export default songPage

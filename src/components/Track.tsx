@@ -1,4 +1,3 @@
-"use client"
 import styled from "styled-components"
 import React, { useEffect, useRef, useState } from "react"
 import { Howl, Howler } from "howler"

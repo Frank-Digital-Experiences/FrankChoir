@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Songs</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta name="Regnsbagsfonden" content="Regnsbagsfonden" />
+        <meta name="frankchoir" content="frankchoir" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Component {...pageProps} />
