@@ -1,0 +1,30 @@
+{
+  "name": "frankchoir",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "start": "next dev",
+    "build": "next build",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@contentful/rich-text-react-renderer": "^15.17.1",
+    "@contentful/rich-text-types": "^16.2.1",
+    "contentful": "^10.2.4",
+    "next": "14.1.0",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-howler": "^5.2.0",
+    "styled-components": "^6.1.8",
+    "wavesurfer.js": "^7.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "typescript": "^5"
+  }
+}
