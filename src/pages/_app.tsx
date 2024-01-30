@@ -7,7 +7,7 @@ import styled from "styled-components"
 function MyApp({ Component, pageProps }: AppProps) {
   const { slugCollection } = pageProps
   // byggs varje gång App renderas. Men det känns ok.
-  console.log(pageProps)
+
   return (
     <>
       <Head>

@@ -151,7 +151,6 @@ const StyledWaveForm = styled.div<StyledWaveFormProps>`
     ${(props) => {
       const width = props.regionMarker.right - props.regionMarker.left
       const start = props.regionMarker.left
-      console.log("styledRegion", props.regionMarker)
 
       return `
       left: ${start}px;

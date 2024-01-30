@@ -20,7 +20,6 @@ export const Track: React.FC<TrackProps> = ({
   const [volume, setVolume] = useState(0.5)
   const [pan, setPan] = useState(0)
   const soundRef = useRef<Howl | null>(null)
-  console.log("playregion", region)
 
   useEffect(() => {
     // Create Howl instance when component mounts and region exists

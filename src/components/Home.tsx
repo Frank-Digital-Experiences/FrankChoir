@@ -10,7 +10,6 @@ const NotFound: React.FC = (songs) => {
       <span>frank choir</span>
       {Object.values(songs).map((song, i) => {
         const { slug, title } = song?.fields
-        console.log(slug)
 
         return (
           <a key={i} href={"/" + slug}>
