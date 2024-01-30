@@ -1,5 +1,5 @@
 import React from "react"
-import Home from "./Home"
+import Home from "../components/Home"
 
 import { Entry, EntrySkeletonType, createClient } from "contentful"
 import { GetStaticProps } from "next"
@@ -8,7 +8,10 @@ import { Song } from "../components/Song"
 import NotFound from "./404"
 
 export type SlugCollection = (readonly [string, string])[]
-
+const client = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID || "",
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
+})
 export const page = ({ page }) => {
   if (!page?.metadata) {
     if (!page?.songs) {
@@ -26,10 +29,6 @@ export const page = ({ page }) => {
 
 export default page
 
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || "",
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
-})
 export const getStaticPaths = async () => {
   const { items } = await client.getEntries({
     content_type: "choirSong",
@@ -43,9 +42,7 @@ export const getStaticPaths = async () => {
         fields: { slug },
       } = item
       if (!slug) return { params: { slug: [""] } }
-      if (slug === "home") {
-        return { params: { slug: ["/"] } }
-      }
+
       return {
         params: { slug: [slug.toString()] },
       }
