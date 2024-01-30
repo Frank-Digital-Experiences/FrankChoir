@@ -16,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="frankchoir" content="frankchoir" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Component {...pageProps} />
     </>
   )
 }

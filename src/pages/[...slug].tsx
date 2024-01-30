@@ -13,6 +13,13 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 })
 export const page = ({ page }) => {
+  if (!page?.metadata) {
+    if (!page?.songs) {
+      return <NotFound />
+    } else {
+      return <Home {...page.songs} />
+    }
+  }
   return (
     <main>
       <Song {...page.fields} />
@@ -40,7 +47,6 @@ export const getStaticPaths = async () => {
         params: { slug: [slug.toString()] },
       }
     })
-
   return {
     paths,
     fallback: "blocking",
