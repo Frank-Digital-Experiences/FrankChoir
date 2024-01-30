@@ -49,7 +49,7 @@ export const getStaticPaths = async () => {
     })
 
   return {
-    paths: [{ params: { slug: ["down-to-the-river", "hallelujah"] } }],
+    paths,
     fallback: "blocking",
   }
 }
