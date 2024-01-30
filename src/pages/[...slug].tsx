@@ -12,7 +12,7 @@ const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || "",
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 })
-export const page = ({ page }) => {
+export const Page = ({ page }) => {
   return (
     <main>
       <Song {...page.fields} />
@@ -20,7 +20,7 @@ export const page = ({ page }) => {
   )
 }
 
-export default page
+export default Page
 
 export const getStaticPaths = async () => {
   const { items } = await client.getEntries({
