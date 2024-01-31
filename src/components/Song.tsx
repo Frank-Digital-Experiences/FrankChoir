@@ -1,3 +1,4 @@
+"use client"
 import styled, { CSSProperties } from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
