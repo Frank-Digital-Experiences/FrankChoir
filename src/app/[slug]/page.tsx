@@ -13,7 +13,6 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 })
 const Page = async ({ params }: any) => {
-  console.log(params)
   const { items } = await client.getEntries({
     content_type: "choirSong",
     "fields.slug": params.slug,

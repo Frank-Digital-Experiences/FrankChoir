@@ -3,6 +3,12 @@ import styled, { CSSProperties } from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import WaveSurfer from "wavesurfer.js"
 import { Track } from "./Track"
+import TrackBG from "../../public/images/track.png"
+import Wood from "../../public/images/wood.png"
+import Speaker from "../../public/images/speaker.png"
+import Logo from "../../public/images/logo.png"
+import StartButton from "../../public/images/button.png"
+import StopButton from "../../public/images/StopButton.png"
 
 type SongProps = {
   tracks: any[]
@@ -11,6 +17,7 @@ type SongProps = {
 
 export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [extraTracks, setExtraTracks] = useState(0)
   const [songDuration, setSongDuration] = useState(0)
   const [region, setRegion] = useState<Region>({ start: 0, end: 0 })
   const [regionMarker, setRegionMarker] = useState<RegionMarker>({
@@ -25,12 +32,20 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   }
 
   useEffect(() => {
+    if (tracks && tracks.length < 6) {
+      console.log(tracks)
+
+      setExtraTracks(6 - tracks.length)
+    }
+  }, [tracks])
+
+  useEffect(() => {
     if (waveformRef.current && !wavesurferRef.current) {
       wavesurferRef.current = WaveSurfer.create({
         container: waveformRef.current,
-        waveColor: "#9191e5",
-        progressColor: "#9191e5",
-        height: 150,
+        waveColor: "#01A301",
+        progressColor: "#01A301",
+        height: 90,
         barWidth: 5,
         barGap: 1,
         barRadius: 10,
@@ -54,6 +69,7 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   }, [tracks])
 
   const handleMouseEvent = (event: React.MouseEvent<HTMLDivElement>) => {
+    setIsPlaying(false)
     const wavesurfer = wavesurferRef.current
     if (wavesurfer) {
       const { offsetX } = event.nativeEvent
@@ -96,34 +112,193 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   }
 
   return (
-    <StyledSong>
-      <h2>{title}</h2>
-      <StyledMixer>
-        {tracks.map((track, i) => (
-          <Track
-            key={i}
-            duration={songDuration}
-            region={region}
-            title={track.fields.title}
-            isPlaying={isPlaying}
-            track={track.fields.track.fields.file.url}
+    <StyledMixer>
+      <StyledWood backgroundImage={Wood}>
+        <StyledLogo>
+          <img src={Logo.src} />
+        </StyledLogo>
+        <StyledSpeaker>
+          <img src={Speaker.src} />
+        </StyledSpeaker>
+        <StyledButton isPlaying={isPlaying}>
+          <img src={isPlaying ? StopButton.src : StartButton.src} />
+          <button onClick={() => setIsPlaying(!isPlaying)}>
+            {isPlaying ? "Stop" : "Play"}
+          </button>
+        </StyledButton>
+      </StyledWood>
+      <StyledPanel>
+        <Heading>
+          <h2>{title}</h2>
+        </Heading>
+        <StyledTracks>
+          {tracks.map((track, i) => {
+            return (
+              <Track
+                key={i}
+                duration={songDuration}
+                region={region}
+                title={track.fields.title}
+                isPlaying={isPlaying}
+                track={track.fields.track.fields.file.url}
+              />
+            )
+          })}
+          {Array.from(Array(extraTracks), (e, i) => {
+            return <ExtraTrack backgroundImage={TrackBG} key={i}></ExtraTrack>
+          })}
+        </StyledTracks>
+        <WaveformWrapper>
+          <StyledWaveForm
+            regionMarker={regionMarker}
+            onMouseDown={handleMouseEvent}
+            onMouseUp={handleMouseUp}
+            id="waveform"
+            ref={waveformRef}
           />
-        ))}
-      </StyledMixer>
-      <button onClick={() => setIsPlaying(!isPlaying)}>
-        {isPlaying ? "Stop" : "Play"}
-      </button>
-      <StyledWaveForm
-        regionMarker={regionMarker}
-        onMouseDown={handleMouseEvent}
-        onMouseUp={handleMouseUp}
-        id="waveform"
-        ref={waveformRef}
-      />
-    </StyledSong>
+        </WaveformWrapper>
+      </StyledPanel>
+    </StyledMixer>
   )
 }
+type BackgroundProps = {
+  backgroundImage: any
+}
 
+const StyledMixer = styled.div`
+  display: flex;
+`
+
+const StyledWood = styled.div<BackgroundProps>`
+  aspect-ratio: 200 / 750;
+  position: relative;
+  max-height: 750px;
+  min-width: 120px;
+
+  background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+`
+
+const StyledLogo = styled.div`
+  margin-top: 30%;
+
+  width: 100%;
+  aspect-ratio: 1/1;
+`
+const StyledSpeaker = styled.div`
+  margin-top: 30%;
+  aspect-ratio: 146/190;
+  width: 70%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+`
+type ButtonProps = {
+  isPlaying: boolean
+}
+const StyledButton = styled.div<ButtonProps>`
+  margin-top: 30%;
+  position: relative;
+  aspect-ratio: 100/160;
+  height: 20%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  ${(props) => {
+    if (props.isPlaying) {
+      return `
+        &:after {
+
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8%;
+    background-color: #37ff00a4;
+    border-radius: 50%;
+    box-shadow: 0px 0px 54px 10px rgba(54, 217, 28, 1);
+    -webkit-box-shadow: 0px 0px 54px 10px rgba(54, 217, 28, 1);
+    -moz-box-shadow: 0px 0px 54px 10px rgba(54, 217, 28, 1);
+  }
+      `
+    }
+  }}
+
+  button {
+    position: absolute;
+    bottom: 30%;
+    border: none;
+    background-color: transparent;
+    text-transform: uppercase;
+    font-family: "Roboto Mono";
+    text-shadow: 2px 2px 2px white;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+`
+const StyledPanel = styled.div`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+
+  max-width: 1200px;
+`
+
+const StyledTracks = styled.div`
+  outline: solid grey;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(120px, 200px);
+`
+const WaveformWrapper = styled.div`
+  padding: 1rem;
+  background: linear-gradient(180deg, #aeab98 0%, #b7b3a6 100%);
+  height: 105px;
+  min-width: 500px;
+`
+
+const Heading = styled.div`
+  border: 2px solid black;
+  text-align: center;
+  background: rgb(244, 243, 236);
+
+  background: linear-gradient(
+    180deg,
+    rgba(244, 243, 236, 1) 0%,
+    rgba(232, 228, 214, 1) 100%
+  );
+  h2 {
+    font-family: "Roboto Mono";
+    font-size: 18px;
+    text-shadow: 2px 2px 2px white;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 3px;
+    padding: 15px 0;
+  }
+`
+const ExtraTrack = styled.div<BackgroundProps>`
+  background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-size: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  aspect-ratio: 200 / 530;
+
+  margin: 0;
+  padding: 0;
+`
 type RegionMarker = {
   right: number
   left: number
@@ -140,13 +315,18 @@ type StyledWaveFormProps = {
 
 const StyledWaveForm = styled.div<StyledWaveFormProps>`
   position: relative;
-  background-color: #3c083c;
+  background-color: #1e1e1e;
+
   padding: 10px 0;
-  color: #6e6efd;
+
+  height: 90px;
+  border-radius: 10px;
   &:after {
     content: "";
     position: absolute;
-    background-color: #c1e249;
+    background-color: white;
+    z-index: 500;
+    opacity: 0.3;
     top: 0;
     height: 100%;
     ${(props) => {
@@ -159,14 +339,4 @@ const StyledWaveForm = styled.div<StyledWaveFormProps>`
       `
     }};
   }
-`
-
-const StyledSong = styled.div`
-  margin-top: 50px;
-`
-
-const StyledMixer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: repeat(auto-fill, 150px);
 `

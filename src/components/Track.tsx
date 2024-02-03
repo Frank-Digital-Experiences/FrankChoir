@@ -1,6 +1,9 @@
 import styled from "styled-components"
 import React, { useEffect, useRef, useState } from "react"
 import { Howl, Howler } from "howler"
+import trackBG from "../../public/images/track.png"
+import FaderBig from "../../public/images/stort-reglage 1.png"
+import FaderSmall from "../../public/images/litet-reglage 1.png"
 
 type TrackProps = {
   track: string
@@ -81,11 +84,19 @@ export const Track: React.FC<TrackProps> = ({
   }
 
   return (
-    <StyledTrack>
+    <StyledTrack
+      style={{
+        backgroundImage: `url(${trackBG.src})`,
+
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "contain",
+      }}
+    >
       <h4>{title}</h4>
 
       <FaderWrapper>
         <StyledFader
+          backgroundImage={FaderBig}
           min={0}
           max={1}
           step={0.01}
@@ -97,6 +108,7 @@ export const Track: React.FC<TrackProps> = ({
 
       <StyledPanWrapper>
         <StyledPan
+          backgroundImage={FaderSmall}
           min={-1}
           max={1}
           step={0.01}
@@ -109,14 +121,23 @@ export const Track: React.FC<TrackProps> = ({
   )
 }
 
-const StyledTrack = styled.div`
-  height: 300px;
+export const StyledTrack = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  background-color: #d8d8d8;
+
+  margin: 0;
+  padding: 0;
+  aspect-ratio: 200 / 530;
+  overflow: hidden;
   h4 {
+    font-family: "Roboto Mono";
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 2px white;
+    margin-top: 40px;
   }
   label {
     font-size: 14px;
@@ -129,33 +150,37 @@ const FaderWrapper = styled.div`
   display: flex;
 `
 
-const StyledFader = styled.input`
+type BackgroundProps = {
+  backgroundImage: any
+}
+
+const StyledFader = styled.input<BackgroundProps>`
   -webkit-appearance: none;
   appearance: none;
   height: 2px;
+  width: 190%;
 
   position: absolute;
-  background-color: #340e0e;
+  background-color: transparent;
+
   pointer-events: none;
   left: 0;
   left: 50%;
-  top: 50%;
-  transform: translateX(-50%) rotate(-90deg);
+  top: 46.5%;
+  transform: translateX(calc(-50% - 2px)) rotate(-90deg);
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     border: none;
     pointer-events: all;
-    width: 1.55rem;
-    height: 0.95rem;
-    background-color: #fff8f8;
-    box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
-    -webkit-box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
-    -moz-box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
+    background: transparent;
+    background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+    background-position: center;
+    background-repeat: no-repeat;
 
+    transform: rotate(90deg);
     cursor: pointer;
-    position: relative;
   }
 
   &::-moz-range-thumb {
@@ -163,15 +188,17 @@ const StyledFader = styled.input`
     appearance: none;
     border: none;
     pointer-events: all;
-    width: 1.55rem;
-    height: 0.95rem;
-    background-color: #fff8f8;
-    box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
-    -webkit-box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
-    -moz-box-shadow: 11px 8px 12px -11px rgba(0, 0, 0, 1);
+    width: 100px;
+    height: 200px;
+    background: transparent;
 
+    background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+    background-position: center;
+    background-repeat: no-repeat;
+    background-blend-mode: revert;
+
+    transform: rotate(90deg);
     cursor: pointer;
-    position: relative;
   }
 `
 
@@ -183,23 +210,26 @@ const StyledPanWrapper = styled.div`
   display: flex;
   justify-content: center;
 `
-const StyledPan = styled.input`
+const StyledPan = styled.input<BackgroundProps>`
   width: 100px;
   appearance: none;
   height: 2px;
 
   position: absolute;
-
-  background-color: black;
+  background-color: transparent;
+  margin-top: -25%;
   pointer-events: none;
+
+  width: 115%;
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     border: none;
     pointer-events: all;
-    width: 0.45rem;
-    height: 1.25rem;
-    background-color: #5f5f5f;
+    background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
     cursor: pointer;
   }
 
@@ -208,12 +238,15 @@ const StyledPan = styled.input`
     appearance: none;
     border: none;
     pointer-events: all;
-    width: 0.45rem;
-    height: 1.25rem;
-    background-color: #9b7979;
-    box-shadow: -1px -1px 12px -5px rgba(0, 0, 0, 1);
-    -webkit-box-shadow: -1px -1px 12px -5px rgba(0, 0, 0, 1);
-    -moz-box-shadow: -1px -1px 12px -5px rgba(0, 0, 0, 1);
+    background-color: transparent;
+    width: 90px;
+    height: 70px;
+
+    border-radius: 0;
+    background-image: ${(props) => `url("${props.backgroundImage.src}")`};
+    background-position: center;
+    background-repeat: no-repeat;
+
     cursor: pointer;
   }
 `
