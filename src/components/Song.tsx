@@ -115,13 +115,16 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
     <StyledMixer>
       <StyledWood backgroundImage={Wood}>
         <StyledLogo>
-          <img src={Logo.src} />
+          <img src={Logo.src} alt="logo" />
         </StyledLogo>
         <StyledSpeaker>
-          <img src={Speaker.src} />
+          <img src={Speaker.src} alt="speaker" />
         </StyledSpeaker>
         <StyledButton isPlaying={isPlaying}>
-          <img src={isPlaying ? StopButton.src : StartButton.src} />
+          <img
+            src={isPlaying ? StopButton.src : StartButton.src}
+            alt={isPlaying ? "pause button" : "play button"}
+          />
           <button onClick={() => setIsPlaying(!isPlaying)}>
             {isPlaying ? "Stop" : "Play"}
           </button>

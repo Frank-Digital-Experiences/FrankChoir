@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import React, { useEffect, useRef, useState } from "react"
-import { Howl, Howler } from "howler"
+import { Howl } from "howler"
 import trackBG from "../../public/images/track.png"
 import FaderBig from "../../public/images/stort-reglage 1.png"
 import FaderSmall from "../../public/images/litet-reglage 1.png"

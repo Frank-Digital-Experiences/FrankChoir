@@ -1,3 +1,7 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    // Remove suggestions to use Next <Image>
+    "@next/next/no-img-element": "off"
+  }
 }
