@@ -324,11 +324,17 @@ const StyledWaveForm = styled.div<StyledWaveFormProps>`
   &:after {
     content: "";
     position: absolute;
-    background-color: white;
+    background: linear-gradient(
+      to top,
+      #00000000 10%,
+      #ffffff80 30%,
+      #ffffff80 70%,
+      #00000000 90%
+    );
     z-index: 500;
-    opacity: 0.3;
     top: 0;
     height: 100%;
+    box-shadow: -1px 0px 0px 0px white, 1px 0px 0px 0px white;
     ${(props) => {
       const width = props.regionMarker.right - props.regionMarker.left
       const start = props.regionMarker.left
