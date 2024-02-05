@@ -174,10 +174,14 @@ const StyledFader = styled.input<BackgroundProps>`
     appearance: none;
     border: none;
     pointer-events: all;
+    width: 100px;
+    height: 200px;
     background: transparent;
+
     background-image: ${(props) => `url("${props.backgroundImage.src}")`};
     background-position: center;
     background-repeat: no-repeat;
+    background-blend-mode: revert;
 
     transform: rotate(90deg);
     cursor: pointer;
@@ -226,11 +230,14 @@ const StyledPan = styled.input<BackgroundProps>`
     appearance: none;
     border: none;
     pointer-events: all;
+    background-color: transparent;
+    width: 90px;
+    height: 70px;
+
+    border-radius: 0;
     background-image: ${(props) => `url("${props.backgroundImage.src}")`};
     background-position: center;
     background-repeat: no-repeat;
-    background-color: transparent;
-    cursor: pointer;
   }
 
   &::-moz-range-thumb {
