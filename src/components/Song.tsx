@@ -177,7 +177,12 @@ const StyledWood = styled.div<BackgroundProps>`
 
   background-image: ${(props) => `url("${props.backgroundImage.src}")`};
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: 100% 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 
   img {
     width: 100%;
@@ -187,28 +192,19 @@ const StyledWood = styled.div<BackgroundProps>`
 `
 
 const StyledLogo = styled.div`
-  margin-top: 30%;
-
-  width: 100%;
   aspect-ratio: 1/1;
 `
 const StyledSpeaker = styled.div`
-  margin-top: 30%;
   aspect-ratio: 146/190;
   width: 70%;
-  margin-left: 50%;
-  transform: translateX(-50%);
 `
 type ButtonProps = {
   isPlaying: boolean
 }
 const StyledButton = styled.div<ButtonProps>`
-  margin-top: 30%;
   position: relative;
   aspect-ratio: 100/160;
   height: 20%;
-  margin-left: 50%;
-  transform: translateX(-50%);
   ${(props) => {
     if (props.isPlaying) {
       return `
