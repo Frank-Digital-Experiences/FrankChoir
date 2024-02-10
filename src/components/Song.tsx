@@ -14,31 +14,55 @@ type SongProps = {
   tracks: any[]
   title: string
 }
+type RegionMarker = {
+  stop: number
+  start: number
+  markerStart: number
+  markerStop: number
+}
+
+type Region = {
+  start: number
+  stop: number
+  markerStart: number | null
+  markerStop: number | null
+}
 
 export const Song: React.FC<SongProps> = ({ tracks, title }) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [extraTracks, setExtraTracks] = useState(0)
   const [songDuration, setSongDuration] = useState(0)
-  const [region, setRegion] = useState<Region>({ start: 0, end: 0 })
-  const [regionMarker, setRegionMarker] = useState<RegionMarker>({
-    left: 0,
-    right: 0,
+
+  const [mouseIsDown, setMouseIsDown] = useState(false)
+  const [dragAnchor, setDragAnchor] = useState("stop")
+
+  const [region, setRegion] = useState<Region>({
+    start: 0,
+    stop: 0,
+    markerStart: null,
+    markerStop: null,
   })
+
   const waveformRef = useRef<HTMLDivElement>(null)
   const wavesurferRef = useRef<WaveSurfer | null>(null)
 
   const resetRegion = (duration: number) => {
-    setRegion({ start: 0, end: duration * 1000 })
+    setRegion({
+      start: 0,
+      stop: duration * 1000,
+      markerStart: null,
+      markerStop: null,
+    })
   }
 
+  // adds extra empty tracks so total tracks are 6
   useEffect(() => {
     if (tracks && tracks.length < 6) {
-      console.log(tracks)
-
       setExtraTracks(6 - tracks.length)
     }
   }, [tracks])
 
+  // initiate waveform
   useEffect(() => {
     if (waveformRef.current && !wavesurferRef.current) {
       wavesurferRef.current = WaveSurfer.create({
@@ -46,8 +70,8 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
         waveColor: "#01A301",
         progressColor: "#01A301",
         height: 90,
-        barWidth: 5,
-        barGap: 1,
+        barWidth: 1.8,
+        barGap: 1.5,
         barRadius: 10,
         normalize: true,
       })
@@ -67,48 +91,78 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
       }
     }
   }, [tracks])
+  const wavesurfer = wavesurferRef?.current
 
-  const handleMouseEvent = (event: React.MouseEvent<HTMLDivElement>) => {
-    setIsPlaying(false)
-    const wavesurfer = wavesurferRef.current
-    if (wavesurfer) {
-      const { offsetX } = event.nativeEvent
-
-      const duration = wavesurfer.getDuration()
-      const currentPosition =
-        (offsetX / waveformRef.current!.offsetWidth) * duration
-      wavesurfer.seekTo(currentPosition)
-
-      setRegionMarker((prevState) => ({
+  const changeRegionValues = (offsetX: any, regionKey: any) => {
+    setRegion((prevState) => {
+      return {
         ...prevState,
-        left: offsetX,
-      }))
-      currentPosition &&
-        setRegion((prevState) => ({
-          ...prevState,
-          start: currentPosition * 1000,
-        }))
-    }
+        ["marker" + regionKey[0].toUpperCase() + regionKey.substring(1)]:
+          offsetX,
+      }
+    })
+  }
+  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+    setMouseIsDown(true)
+    setIsPlaying(false)
+    setRegion((prevState) => {
+      return {
+        ...prevState,
+        markerStart: event.nativeEvent.offsetX,
+        markerStop: event.nativeEvent.offsetX,
+      }
+    })
   }
 
   const handleMouseUp = (event: React.MouseEvent<HTMLDivElement>) => {
-    const wavesurfer = wavesurferRef.current
-    if (wavesurfer) {
-      const { offsetX } = event.nativeEvent
-      setRegionMarker((prevState) => ({
-        ...prevState,
-        right: offsetX,
-      }))
+    event.stopPropagation()
+    setMouseIsDown(false)
+    if (wavesurfer && region.markerStart && region.markerStop) {
       const duration = wavesurfer.getDuration()
-      const currentPosition =
-        (offsetX / waveformRef.current!.offsetWidth) * duration
-      wavesurfer.seekTo(currentPosition)
-      currentPosition &&
-        setRegion((prevState) => ({
+      const start =
+        (region.markerStart / waveformRef.current!.offsetWidth) *
+        duration *
+        1000
+      const stop =
+        (region.markerStop / waveformRef.current!.offsetWidth) * duration * 1000
+      setRegion((prevState) => {
+        return {
           ...prevState,
-          end: currentPosition * 1000,
-        }))
+          start: start < stop ? start : stop,
+          stop: stop > start ? stop : start,
+        }
+      })
     }
+  }
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!mouseIsDown) {
+      return
+    } else {
+      if (dragAnchor === "start" && region.markerStop) {
+        if (event.nativeEvent.offsetX > region.markerStop) {
+          setDragAnchor("stop")
+        }
+      }
+      if (dragAnchor === "stop" && region.markerStart) {
+        if (event.nativeEvent.offsetX < region.markerStart) {
+          setDragAnchor("start")
+        }
+      }
+
+      changeRegionValues(event.nativeEvent.offsetX, dragAnchor)
+    }
+  }
+
+  const handleRegionDrag = (
+    event: React.MouseEvent<HTMLDivElement>,
+    anchor: string
+  ) => {
+    setDragAnchor(anchor)
+    event.stopPropagation()
+    setMouseIsDown(true)
+    setIsPlaying(false)
   }
 
   return (
@@ -150,12 +204,24 @@ export const Song: React.FC<SongProps> = ({ tracks, title }) => {
         </StyledTracks>
         <WaveformWrapper>
           <StyledWaveForm
-            regionMarker={regionMarker}
-            onMouseDown={handleMouseEvent}
+            onMouseMove={handleMouseMove}
+            onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             id="waveform"
             ref={waveformRef}
-          />
+          >
+            <StyledRegionMarker mouseIsDown={mouseIsDown} regionMarker={region}>
+              <DragWrapper
+                onMouseDown={(e) => handleRegionDrag(e, "start")}
+                position="start"
+              ></DragWrapper>
+
+              <DragWrapper
+                onMouseDown={(e) => handleRegionDrag(e, "stop")}
+                position="end"
+              ></DragWrapper>
+            </StyledRegionMarker>
+          </StyledWaveForm>
         </WaveformWrapper>
       </StyledPanel>
     </StyledMixer>
@@ -165,6 +231,62 @@ type BackgroundProps = {
   backgroundImage: any
 }
 
+type dragwrapperprops = {
+  position: string
+}
+const DragWrapper = styled.div<dragwrapperprops>`
+  height: 100%;
+  width: 28px;
+  z-index: 10;
+  ${(props) => {
+    return props.position === "start"
+      ? "margin-left: -14px"
+      : "margin-right: -14px"
+  }};
+
+  position: relative;
+
+  cursor: pointer;
+`
+type RegionMarkerProps = {
+  regionMarker: any
+  mouseIsDown: boolean
+}
+const StyledRegionMarker = styled.div<RegionMarkerProps>`
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: ${(props) => (props.mouseIsDown ? "none" : "")};
+  background: linear-gradient(
+    to top,
+    #00000000 25%,
+    #57ff2880 40%,
+    #1aff009a 60%,
+    #00000000 75%
+  );
+  z-index: 500;
+  top: 0;
+  height: 100%;
+  box-shadow: -1px 0px 0px 0px white, 1px 0px 0px 0px white;
+  resize: both;
+  ${(props) => {
+    const stop =
+      props.regionMarker.markerStart > props.regionMarker.markerStop
+        ? props.regionMarker.markerStart
+        : props.regionMarker.markerStop
+    const start =
+      props.regionMarker.markerStart < props.regionMarker.markerStop
+        ? props.regionMarker.markerStart
+        : props.regionMarker.markerStop
+
+    const width = stop - start
+
+    return `
+      left: ${start}px;
+      width: ${width}px;
+      `
+  }};
+`
 const StyledMixer = styled.div`
   display: flex;
 `
@@ -259,6 +381,7 @@ const WaveformWrapper = styled.div`
   background: linear-gradient(180deg, #aeab98 0%, #b7b3a6 100%);
   height: 105px;
   min-width: 500px;
+  position: relative;
 `
 
 const Heading = styled.div`
@@ -295,21 +418,8 @@ const ExtraTrack = styled.div<BackgroundProps>`
   margin: 0;
   padding: 0;
 `
-type RegionMarker = {
-  right: number
-  left: number
-}
 
-type Region = {
-  start: number
-  end: number
-}
-
-type StyledWaveFormProps = {
-  regionMarker: RegionMarker // Define the type of regionMarker prop
-}
-
-const StyledWaveForm = styled.div<StyledWaveFormProps>`
+const StyledWaveForm = styled.div`
   position: relative;
   background-color: #1e1e1e;
 
@@ -317,28 +427,4 @@ const StyledWaveForm = styled.div<StyledWaveFormProps>`
 
   height: 90px;
   border-radius: 10px;
-  &:after {
-    content: "";
-    position: absolute;
-    background: linear-gradient(
-      to top,
-      #00000000 10%,
-      #ffffff80 30%,
-      #ffffff80 70%,
-      #00000000 90%
-    );
-    z-index: 500;
-    top: 0;
-    height: 100%;
-    box-shadow: -1px 0px 0px 0px white, 1px 0px 0px 0px white;
-    ${(props) => {
-      const width = props.regionMarker.right - props.regionMarker.left
-      const start = props.regionMarker.left
-
-      return `
-      left: ${start}px;
-      width: ${width}px;
-      `
-    }};
-  }
 `

@@ -9,7 +9,7 @@ type TrackProps = {
   track: string
   isPlaying: boolean
   title: string
-  region: { start: number; end: number }
+  region: { start: number; stop: number }
   duration: number
 }
 
@@ -26,12 +26,12 @@ export const Track: React.FC<TrackProps> = ({
 
   useEffect(() => {
     // Create Howl instance when component mounts and region exists
-    if (region && region.start !== undefined && region.end !== undefined) {
+    if (region && region.start !== undefined && region.stop !== undefined) {
       let loopSection: [number, number, boolean]
-      if (region.start === region.end) {
+      if (region.start === region.stop) {
         loopSection = [region.start, duration * 1000 - region.start, true]
       } else {
-        loopSection = [region.start, region.end - region.start, true]
+        loopSection = [region.start, region.stop - region.start, true]
       }
       soundRef.current = new Howl({
         src: [track],
@@ -40,22 +40,22 @@ export const Track: React.FC<TrackProps> = ({
           loop: loopSection,
         },
       })
-      const updateProgressMarker = () => {
-        if (soundRef.current) {
-          const currentTime = soundRef.current.seek() // Get the current playback position
-        }
+      // const updateProgressMarker = () => {
+      //   if (soundRef.current) {
+      //     const currentTime = soundRef.current.seek() // Get the current playback position
+      //   }
 
-        // Update the position of the progress marker on your UI
-        // For example:
-        // progressMarker.style.left = `${(currentTime / sound.duration()) * 100}%`;
-      }
-      soundRef.current.on("play", () => {
-        setInterval(updateProgressMarker, 500) // Update marker position every second
-      })
-      return () => {
-        // Cleanup: stop and unload the sound when component unmounts
-        soundRef.current && soundRef.current.unload()
-      }
+      //   // Update the position of the progress marker on your UI
+      //   // For example:
+      //   // progressMarker.style.left = `${(currentTime / sound.duration()) * 100}%`;
+      // }
+      // soundRef.current.on("play", () => {
+      //   setInterval(updateProgressMarker, 500) // Update marker position every second
+      // })
+      // return () => {
+      //   // Cleanup: stop and unload the sound when component unmounts
+      //   soundRef.current && soundRef.current.unload()
+      // }
     }
   }, [region]) // Listen for changes in the region prop
 
