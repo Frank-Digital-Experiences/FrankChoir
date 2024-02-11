@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
-import { renderRichText } from 'gatsby-source-contentful/rich-text'
-import React from 'react'
+import styled from "@emotion/styled"
+import { renderRichText } from "gatsby-source-contentful/rich-text"
+import React from "react"
 
-import { ContentfulRichText } from 'src/shared/ContentfulTypes'
+import { ContentfulRichText } from "src/shared/ContentfulTypes"
 
-import { breakpoints } from '../shared/DeviceBreakPoints'
-import UnderConstructionIcon from '../images/sticker_under_construction.svg'
-import TextColumn from './TextColumn'
+import { breakpoints } from "../shared/DeviceBreakPoints"
+import UnderConstructionIcon from "../../images/sticker_under_construction.svg"
+import TextColumn from "./TextColumn"
 
 type UnderConstructionProps = {
   data: {
@@ -84,7 +84,7 @@ const Section = styled.section`
   padding: 0 var(--site-horizontal-padding);
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;

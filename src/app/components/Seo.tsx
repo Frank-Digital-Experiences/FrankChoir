@@ -1,6 +1,6 @@
-import React from 'react'
-import { Helmet } from 'react-helmet'
-import frankOgImage from '../images/frank-fam-share-image.png'
+import React from "react"
+import { Helmet } from "react-helmet"
+import frankOgImage from "../../images/frank-fam-share-image.png"
 
 export type SeoProps = {
   description?: string
@@ -9,11 +9,17 @@ export type SeoProps = {
   slug?: string
   language?: string
 }
-const Seo: React.FC<SeoProps> = ({ title, description, image, slug, language }) => {
+const Seo: React.FC<SeoProps> = ({
+  title,
+  description,
+  image,
+  slug,
+  language,
+}) => {
   const metaTitle = title
-  const metaDescription = `${description || ''}`
+  const metaDescription = `${description || ""}`
   const metaUrl = `https://frankfam.co/${
-    slug === 'homepage' || !slug ? '' : slug
+    slug === "homepage" || !slug ? "" : slug
   }`
 
   const metaImage = image ? image.file?.url : `${frankOgImage}`
@@ -21,54 +27,54 @@ const Seo: React.FC<SeoProps> = ({ title, description, image, slug, language }) 
   return (
     <Helmet
       title={metaTitle}
-      htmlAttributes={language ? { lang: language } : { lang: 'en' }}
+      htmlAttributes={language ? { lang: language } : { lang: "en" }}
       meta={[
         {
-          name: 'description',
+          name: "description",
           content: metaDescription,
         },
         {
-          property: 'og:title',
+          property: "og:title",
           content: metaTitle,
         },
         {
-          property: 'og:description',
+          property: "og:description",
           content: metaDescription,
         },
         {
-          property: 'og:type',
-          content: 'website',
+          property: "og:type",
+          content: "website",
         },
         {
-          property: 'og:locale',
-          content: 'en_US',
+          property: "og:locale",
+          content: "en_US",
         },
         {
-          property: 'og:site_name',
+          property: "og:site_name",
           content: metaTitle,
         },
         {
-          property: 'og:image',
+          property: "og:image",
           content: metaImage,
         },
         {
-          property: 'og:url',
+          property: "og:url",
           content: metaUrl,
         },
         {
-          name: 'twitter:card',
-          content: '',
+          name: "twitter:card",
+          content: "",
         },
         {
-          name: 'twitter:title',
+          name: "twitter:title",
           content: metaTitle,
         },
         {
-          name: 'twitter:description',
+          name: "twitter:description",
           content: metaDescription,
         },
         {
-          name: 'twitter:image',
+          name: "twitter:image",
           content: metaImage,
         },
         {},

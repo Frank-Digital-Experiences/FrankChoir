@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
-import { Link } from 'gatsby'
-import React from 'react'
+import styled from "@emotion/styled"
+import { Link } from "gatsby"
+import React from "react"
 
-import arrow from '../images/master-arrow.svg'
+import arrow from "../../images/master-arrow.svg"
 
 type ButtonProps = {
   text: string

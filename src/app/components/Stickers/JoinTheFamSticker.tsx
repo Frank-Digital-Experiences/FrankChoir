@@ -1,16 +1,16 @@
-import styled from '@emotion/styled'
-import React from 'react'
-import { VisuallyHiddenSpan } from '../../shared/StyledComponents'
+import styled from "@emotion/styled"
+import React from "react"
+import { VisuallyHiddenSpan } from "../../shared/StyledComponents"
 import {
   pulseStarOne,
   pulseStarTwo,
   pulseStarThree,
   floatingObject,
   rotateObject,
-} from '../../design-system/Animations'
-import sticker_background from '../../images/join-the-fam/sticker_background.svg'
-import sticker_text from '../../images/join-the-fam/text_join_the_fam.svg'
-import star from '../../images/peace-connect/star.svg'
+} from "../../design-system/Animations"
+import sticker_background from "../../../images/join-the-fam/sticker_background.svg"
+import sticker_text from "../../../images/join-the-fam/text_join_the_fam.svg"
+import star from "../../../images/peace-connect/star.svg"
 
 const JoinTheFamSticker: React.FC = () => {
   return (

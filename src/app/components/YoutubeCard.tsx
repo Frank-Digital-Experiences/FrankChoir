@@ -1,15 +1,14 @@
-import styled from '@emotion/styled'
-import { GatsbyImage } from 'gatsby-plugin-image'
-import React, {
-} from 'react'
+import styled from "@emotion/styled"
+import { GatsbyImage } from "gatsby-plugin-image"
+import React from "react"
 
-import { breakpoints } from '../shared/DeviceBreakPoints'
-import { A11yColors } from '../shared/Colors'
-import { VisuallyHiddenSpan } from '../shared/StyledComponents'
-import { Media } from '../shared/ContentfulTypes'
-import externalLinkIcon from '../images/external-link.svg'
-import { ReactSVG } from "react-svg";
-import { useAppContext } from '../app-context'
+import { breakpoints } from "../shared/DeviceBreakPoints"
+import { A11yColors } from "../shared/Colors"
+import { VisuallyHiddenSpan } from "../shared/StyledComponents"
+import { Media } from "../shared/ContentfulTypes"
+import externalLinkIcon from "../../images/external-link.svg"
+import { ReactSVG } from "react-svg"
+import { useAppContext } from "../app-context"
 
 type Data = {
   videoLength: string
@@ -24,34 +23,60 @@ export type CardProps = {
 }
 
 const YoutubeCard: React.FC<CardProps> = ({ data, index }) => {
-  const { videoLength, media, mediaSmallScreen, screenReaderExtraLinkText, url } = data
-  const { currentLanguage } = useAppContext();
+  const {
+    videoLength,
+    media,
+    mediaSmallScreen,
+    screenReaderExtraLinkText,
+    url,
+  } = data
+  const { currentLanguage } = useAppContext()
 
   return (
-      <YoutubeCardContainer>
-          <StyledMedia>
-            {mediaSmallScreen?.gatsbyImageData ?(
-              <MediaElementMultipleSrc media={media} mediaSmallScreen={mediaSmallScreen} />
-              ) : (
-                <MediaElement media={media}/>
-              )}
-          </StyledMedia>
-          <ExtraInfo color={A11yColors[index % 3]}>
-            <StyledInfo>
-              <>
-                {videoLength}
-                {currentLanguage === 'sv' ? " min intervju." : " min interview."}
-              </>
-            </StyledInfo>
-            <StyledLink href={url} target="_blank">
-              {currentLanguage === 'sv' ?
-                (<span>Spela <VisuallyHiddenSpan>{screenReaderExtraLinkText}</VisuallyHiddenSpan> på Youtube</span>)
-                  : (<span>Play <VisuallyHiddenSpan>{screenReaderExtraLinkText}</VisuallyHiddenSpan> on Youtube</span>)
-              }
-              <ReactSVG src={externalLinkIcon} role="presentation" wrapper={"span"}/>
-            </StyledLink>
-          </ExtraInfo>
-      </YoutubeCardContainer>
+    <YoutubeCardContainer>
+      <StyledMedia>
+        {mediaSmallScreen?.gatsbyImageData ? (
+          <MediaElementMultipleSrc
+            media={media}
+            mediaSmallScreen={mediaSmallScreen}
+          />
+        ) : (
+          <MediaElement media={media} />
+        )}
+      </StyledMedia>
+      <ExtraInfo color={A11yColors[index % 3]}>
+        <StyledInfo>
+          <>
+            {videoLength}
+            {currentLanguage === "sv" ? " min intervju." : " min interview."}
+          </>
+        </StyledInfo>
+        <StyledLink href={url} target="_blank">
+          {currentLanguage === "sv" ? (
+            <span>
+              Spela{" "}
+              <VisuallyHiddenSpan>
+                {screenReaderExtraLinkText}
+              </VisuallyHiddenSpan>{" "}
+              på Youtube
+            </span>
+          ) : (
+            <span>
+              Play{" "}
+              <VisuallyHiddenSpan>
+                {screenReaderExtraLinkText}
+              </VisuallyHiddenSpan>{" "}
+              on Youtube
+            </span>
+          )}
+          <ReactSVG
+            src={externalLinkIcon}
+            role="presentation"
+            wrapper={"span"}
+          />
+        </StyledLink>
+      </ExtraInfo>
+    </YoutubeCardContainer>
   )
 }
 
@@ -61,17 +86,26 @@ const MediaElement = ({ media }: { media: Media }) => {
       alt="ok"
       loading="lazy"
       image={media?.gatsbyImageData}
-      imgStyle={{ height: '100%', width: '100%', objectFit: 'cover' }}
-      style={{ height: '100%', width: '100%' }}      
+      imgStyle={{ height: "100%", width: "100%", objectFit: "cover" }}
+      style={{ height: "100%", width: "100%" }}
     />
   ) : null
 }
 
-const MediaElementMultipleSrc = ({ media, mediaSmallScreen }: { media: Media, mediaSmallScreen: Media }) => {
-  return  (
+const MediaElementMultipleSrc = ({
+  media,
+  mediaSmallScreen,
+}: {
+  media: Media
+  mediaSmallScreen: Media
+}) => {
+  return (
     <picture>
       <source media="(min-width: 768px)" srcSet={`${media?.file?.url}`} />
-      <source media="(max-width: 767px)" srcSet={`${mediaSmallScreen?.file?.url}`} />
+      <source
+        media="(max-width: 767px)"
+        srcSet={`${mediaSmallScreen?.file?.url}`}
+      />
       <img src={`${media?.file?.url}`} alt="ok" />
     </picture>
   )
@@ -133,32 +167,33 @@ const StyledInfo = styled.span`
 const StyledLink = styled.a`
   display: flex;
   border-radius: 60px;
-  border: 2px solid #262A2E;
-  background: #F5F5F5;
+  border: 2px solid #262a2e;
+  background: #f5f5f5;
   margin: 0.6rem 1.125rem 0.6rem 0.5625rem;
-  transition: all .17s ease-in-out;
+  transition: all 0.17s ease-in-out;
 
-  &:hover, &:focus {
-    background-color: #252A2E;
+  &:hover,
+  &:focus {
+    background-color: #252a2e;
 
-    svg path{
+    svg path {
       stroke: white;
     }
 
     > span:first-of-type {
       color: white;
-      padding: .44rem 0.8rem 0.36rem 1.1rem;
+      padding: 0.44rem 0.8rem 0.36rem 1.1rem;
       font-size: 0.9063rem;
       font-weight: 500;
     }
   }
   > span:first-of-type {
-    padding: .4rem 0.8rem 0.4rem 1.1rem;
+    padding: 0.4rem 0.8rem 0.4rem 1.1rem;
     font-size: 0.9063rem;
     font-weight: 500;
   }
   span:nth-child(2) {
-    padding: .4rem 0.8rem 0.4rem .3rem;
+    padding: 0.4rem 0.8rem 0.4rem 0.3rem;
     font-size: 0.9063rem;
     font-weight: 500;
     display: flex;

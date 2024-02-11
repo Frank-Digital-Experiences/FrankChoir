@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 
 import { Entry, EntrySkeletonType, createClient } from "contentful"
 import { GetStaticProps } from "next"
@@ -30,7 +30,7 @@ const client = createClient({
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 })
 
-const Page: React.FC<PageProps> = async ({ data, location, params }) => {
+const Page = async ({ data, location, params }) => {
   const { items } = await client.getEntries({
     content_type: "choirSong",
     "fields.slug": params.slug,
@@ -138,7 +138,7 @@ const Page: React.FC<PageProps> = async ({ data, location, params }) => {
   )
 }
 
-export const query = graphql`
+export const query = graphql`/
   query getContentPage($id: String) {
     contentfulPage(id: { eq: $id }) {
       seoTitle

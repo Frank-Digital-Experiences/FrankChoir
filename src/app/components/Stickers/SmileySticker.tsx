@@ -1,11 +1,9 @@
-import styled from '@emotion/styled'
-import React, { useEffect } from 'react'
-import { useScrollPosition } from '../../hooks/useScroll'
-import stickerSmileyFold from '../../images/sticker_smiley_fold.svg'
-import stickerSmileyHalf from '../../images/sticker_smiley_03.svg'
-import stickerSmileyHearth from '../../images/stickerSmileyHearth.svg'
-
-
+import styled from "@emotion/styled"
+import React, { useEffect } from "react"
+import { useScrollPosition } from "../../hooks/useScroll"
+import stickerSmileyFold from "../../../images/sticker_smiley_fold.svg"
+import stickerSmileyHalf from "../../../images/sticker_smiley_03.svg"
+import stickerSmileyHearth from "../../../images/stickerSmileyHearth.svg"
 
 type SmileyStickerProps = {
   id: string
@@ -21,9 +19,8 @@ const SmileySticker: React.FC<SmileyStickerProps> = ({
   hearth,
   spin,
 }) => {
-  const scrollPos = useScrollPosition().y/2
+  const scrollPos = useScrollPosition().y / 2
 
-  
   useEffect(() => {
     const sticker = document.getElementById(id)
     if (sticker && spin) {
@@ -35,7 +32,13 @@ const SmileySticker: React.FC<SmileyStickerProps> = ({
     <Sticker
       id={id}
       positionLeft={positionLeft}
-      src={one ? stickerSmileyFold : hearth ? stickerSmileyHearth : stickerSmileyHalf}
+      src={
+        one
+          ? stickerSmileyFold
+          : hearth
+          ? stickerSmileyHearth
+          : stickerSmileyHalf
+      }
       role="presentation"
       aria-hidden="true"
       alt=""
@@ -50,7 +53,7 @@ const Sticker = styled.img<SmileyStickerProps>`
   left: ${(SmileyStickerProps) =>
     SmileyStickerProps.positionLeft
       ? `${SmileyStickerProps.positionLeft}`
-      : '300px'};
+      : "300px"};
 `
 
 export default SmileySticker

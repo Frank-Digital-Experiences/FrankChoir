@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import styled from '@emotion/styled'
-import FocusTrap from 'focus-trap-react'
-import frankLogo from '../../images/frank_logo.svg'
-import Hamburger from './HamburgerMenu'
-import LanguageSelector from './LanguageSelector'
-import { breakpoints } from '../../shared/DeviceBreakPoints'
-import { useScrollPosition } from '../../hooks/useScroll'
-import { VisuallyHiddenSpan } from '../../shared/StyledComponents'
-import { useAppContext } from '../../app-context'
+import React, { useEffect, useState } from "react"
+import styled from "@emotion/styled"
+import FocusTrap from "focus-trap-react"
+// import frankLogo from "../../../images/frank_logo.svg"
+import Hamburger from "./HamburgerMenu"
+import LanguageSelector from "./LanguageSelector"
+import { breakpoints } from "../../shared/DeviceBreakPoints"
+import { useScrollPosition } from "../../hooks/useScroll"
+import { VisuallyHiddenSpan } from "../../shared/StyledComponents"
+import { useAppContext } from "../../app-context"
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -18,18 +18,18 @@ const Header: React.FC = () => {
     isMenuOpen ? setIsMenuOpen(false) : setIsMenuOpen(true)
   }
 
-  const { showLanguageSelector } = useAppContext();
+  const { showLanguageSelector } = useAppContext()
 
   useEffect(() => {
-    const documentBody = document.getElementsByTagName('body')[0]
+    const documentBody = document.getElementsByTagName("body")[0]
     if (documentBody) {
       documentBody.style.overflow =
-        isMenuOpen && window.innerWidth < breakpoints.s ? 'hidden' : 'visible'
+        isMenuOpen && window.innerWidth < breakpoints.s ? "hidden" : "visible"
     }
   }, [isMenuOpen])
 
   useEffect(() => {
-    setShowNavbar(scrollDirection.direction === 'up' || scrollDirection.y < 100)
+    setShowNavbar(scrollDirection.direction === "up" || scrollDirection.y < 100)
   }, [scrollDirection.direction, scrollDirection.y])
 
   return (
@@ -39,7 +39,11 @@ const Header: React.FC = () => {
           <StyledImg src={frankLogo} alt="Frank fam." />
         </a>
 
-        {!isMenuOpen && <LanguageSelector showLanguageSelector={showLanguageSelector}></LanguageSelector>}
+        {!isMenuOpen && (
+          <LanguageSelector
+            showLanguageSelector={showLanguageSelector}
+          ></LanguageSelector>
+        )}
 
         <FocusTrap
           active={isMenuOpen}
@@ -52,11 +56,11 @@ const Header: React.FC = () => {
               active={isMenuOpen}
             >
               <VisuallyHiddenSpan>
-                {isMenuOpen ? 'Close menu' : 'Open menu'}
+                {isMenuOpen ? "Close menu" : "Open menu"}
               </VisuallyHiddenSpan>
-              <HamburgerOne active={isMenuOpen} className={'hamburger'} />
-              <HamburgerTwo active={isMenuOpen} className={'hamburger'} />
-              <HamburgerThree active={isMenuOpen} className={'hamburger'} />
+              <HamburgerOne active={isMenuOpen} className={"hamburger"} />
+              <HamburgerTwo active={isMenuOpen} className={"hamburger"} />
+              <HamburgerThree active={isMenuOpen} className={"hamburger"} />
             </StyledHamburgerWrapper>
             <Hamburger
               active={isMenuOpen}
@@ -81,7 +85,7 @@ const FocusWrapper = styled.div`
 const WidthWrapper = styled.nav<Props>`
   display: flex;
   position: fixed;
-  top: ${(props) => (props.showNavBar || props.active ? '0px' : '-115px')};
+  top: ${(props) => (props.showNavBar || props.active ? "0px" : "-115px")};
   width: 100vw;
   z-index: 100;
   background-color: var(--colorWhite);
@@ -114,15 +118,15 @@ const StyledImg = styled.img`
 `
 
 const HamburgerOne = styled.div<Props>`
-  transform: ${(props) => props.active && 'rotate(45deg)'};
+  transform: ${(props) => props.active && "rotate(45deg)"};
 `
 
 const HamburgerTwo = styled.div<Props>`
-  opacity: ${(props) => props.active && '0'};
+  opacity: ${(props) => props.active && "0"};
 `
 
 const HamburgerThree = styled.div<Props>`
-  transform: ${(props) => props.active && 'rotate(-45deg)'};
+  transform: ${(props) => props.active && "rotate(-45deg)"};
 `
 
 const StyledHamburgerWrapper = styled.button<Props>`

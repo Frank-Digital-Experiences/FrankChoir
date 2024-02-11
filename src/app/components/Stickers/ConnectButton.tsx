@@ -1,16 +1,16 @@
-import styled from '@emotion/styled'
-import React from 'react'
+import styled from "@emotion/styled"
+import React from "react"
 import {
   pulseStarOne,
   pulseStarTwo,
   pulseStarThree,
   rotateObject,
-} from '../../design-system/Animations'
-import peace from '../../images/peace-connect/peace.svg'
-import connect from '../../images/peace-connect/connect.svg'
-import star from '../../images/peace-connect/star.svg'
-import { VisuallyHiddenSpan } from '../../shared/StyledComponents'
-import { breakpoints } from '../../shared/DeviceBreakPoints'
+} from "../../design-system/Animations"
+import peace from "../../../images/peace-connect/peace.svg"
+import connect from "../../../images/peace-connect/connect.svg"
+import star from "../../../images/peace-connect/star.svg"
+import { VisuallyHiddenSpan } from "../../shared/StyledComponents"
+import { breakpoints } from "../../shared/DeviceBreakPoints"
 
 type ConnectButtonProps = {
   link?: string
@@ -18,7 +18,7 @@ type ConnectButtonProps = {
 }
 
 const ConnectButton: React.FC<ConnectButtonProps> = ({
-  link = 'mailto:connect@frankdigital.se',
+  link = "mailto:connect@frankdigital.se",
   spinningText = true,
 }) => {
   return (

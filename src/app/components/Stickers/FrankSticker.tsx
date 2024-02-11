@@ -1,9 +1,9 @@
-import styled from '@emotion/styled'
-import React from 'react'
-import { floatingObject } from '../../design-system/Animations'
-import sticker_logo from '../../images/sticker_frank_glitter.svg'
-import star from '../../images/peace-connect/star.svg'
-import { breakpoints } from '../../shared/DeviceBreakPoints'
+import styled from "@emotion/styled"
+import React from "react"
+import { floatingObject } from "../../design-system/Animations"
+import sticker_logo from "../../../images/sticker_frank_glitter.svg"
+import star from "../../../images/peace-connect/star.svg"
+import { breakpoints } from "../../shared/DeviceBreakPoints"
 
 const FrankSticker: React.FC = () => {
   return (

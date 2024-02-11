@@ -1,4 +1,4 @@
-import { useStaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql } from "gatsby"
 
 export const useFooter = () => {
   const footerData = useStaticQuery(graphql`
@@ -13,5 +13,13 @@ export const useFooter = () => {
       }
     }
   `)
+
+  // const { items } = await client.getEntries({
+  //   content_type: "choirSong",
+  //   "fields.slug": params.slug,
+  //   include: 2,
+  //   limit: 1,
+  // })
+
   return footerData
 }

@@ -12,9 +12,9 @@ function Home() {
   return (
     <StyledBody>
       <h2>songs</h2>
-      <a href="/down-to-the-river">Down to the river</a>
+      <a href="/l">Down to the river</a>
 
-      <a href="/hallelujah">Hallelujah</a>
+      <a href="/case-thefarm">/case-thefarm</a>
     </StyledBody>
   )
 }

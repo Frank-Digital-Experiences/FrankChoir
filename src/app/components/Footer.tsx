@@ -1,8 +1,8 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { useFooter } from '../hooks/useFooter'
-import frank_logo from '../images/frank_logo.svg'
-import { breakpoints } from '../shared/DeviceBreakPoints'
+import React from "react"
+import styled from "@emotion/styled"
+import { useFooter } from "../hooks/useFooter"
+// import frank_logo from "../../images/frank_logo.svg"
+import { breakpoints } from "../shared/DeviceBreakPoints"
 
 type MenuLink = {
   title: string
@@ -90,7 +90,7 @@ const StyledAnchor = styled.a`
   align-items: center;
 
   :hover {
-    font-family: 'Zilla Slab Highlight';
+    font-family: "Zilla Slab Highlight";
   }
 `
 
