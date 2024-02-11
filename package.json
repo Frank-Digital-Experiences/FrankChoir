@@ -10,20 +10,25 @@
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.17.1",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
     "contentful": "^10.2.4",
     "next": "14.1.0",
+    "query-string": "^8.2.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-draggable": "^4.4.6",
     "react-howler": "^5.2.0",
+    "react-reduce-motion": "^2.0.2",
     "styled-components": "^6.1.8",
     "wavesurfer.js": "^7.7.0"
   },
   "devDependencies": {
     "@contentful/rich-text-types": "^16.2.1",
-    "@types/react-howler": "^5.2.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-howler": "^5.2.3",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "typescript": "^5"

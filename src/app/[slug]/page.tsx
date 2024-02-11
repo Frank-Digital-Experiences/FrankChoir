@@ -1,34 +1,194 @@
-// "use client"
-import React from "react"
-import Home from "../../components/Home"
+"use client"
 
 import { Entry, EntrySkeletonType, createClient } from "contentful"
 import { GetStaticProps } from "next"
-import { Track } from "../../components/Track"
-import { Song } from "../../components/Song"
 import { log } from "console"
+
+import React from "react"
+import { PageStandard } from "../shared/ContentfulTypes"
+import {
+  isSectionNotWrapped,
+  SectionComponents,
+} from "../utils/SectionSelector"
+import Layout from "../components/Layout"
+import {
+  StyledSectionWrapper,
+  StyledFullwidthSectionWrapper,
+} from "../shared/StyledComponents"
+import { useReduceMotion } from "react-reduce-motion"
+import AppContextProvider from "../app-context"
+import queryString from "query-string"
+
+type PageProps = {
+  data: PageStandard
+  location: any
+  params: any
+}
 
 const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID || "",
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 })
-const Page = async ({ params }: any) => {
+
+const Page: React.FC<PageProps> = async ({ data, location, params }) => {
   const { items } = await client.getEntries({
     content_type: "choirSong",
     "fields.slug": params.slug,
     include: 2,
     limit: 1,
   })
+  const sections = data.contentfulPage.sections
+  const fullwidthSections = data.contentfulPage.sectionsFullwidth
+  const bottomSections = data.contentfulPage.bottomSection
+  const {
+    seoTitle,
+    seoDescription,
+    seoImage,
+    slug,
+    swedishLanguage,
+    showNavbar,
+    showFooter,
+    showLanguageSelector,
+  } = data.contentfulPage
 
-  if (!items || !items[0] || !items[0].fields) {
-    return null
-  }
+  console.log(data)
+
+  let prefersReducedMotion
+  typeof window === "object"
+    ? (prefersReducedMotion = useReduceMotion())
+    : false
+
+  const queryParams = queryString.parse(location.search)
+  const lang = swedishLanguage ? "sv" : "en"
+
   return (
-    <main>
-      <Song {...items[0].fields} />
-    </main>
+    <AppContextProvider
+      currentLanguage={queryParams.lang ? (queryParams.lang as string) : lang}
+      showLanguageSelector={showLanguageSelector ? showLanguageSelector : false}
+      reduceMotion={prefersReducedMotion}
+    >
+      <Layout
+        seo={{ seoTitle, seoDescription, seoImage, slug }}
+        showNavbar={showNavbar}
+        showFooter={showFooter}
+      >
+        {sections
+          ? sections.map((section, i) => {
+              const Component: React.ElementType =
+                SectionComponents[section.__typename]
+              const isNotWrapped = isSectionNotWrapped[section.__typename]
+
+              if (!SectionComponents[section.__typename]) {
+                console.log(`Create a component for ${section.__typename}`)
+
+                // return <div key={i}>create a component for {section.__typename}</div>
+              } else {
+                return isNotWrapped ? (
+                  <Component key={i} index={i} data={section} />
+                ) : (
+                  <StyledSectionWrapper key={i}>
+                    <Component index={i} data={section} />
+                  </StyledSectionWrapper>
+                )
+              }
+            })
+          : null}
+
+        {fullwidthSections
+          ? fullwidthSections.map((section, i) => {
+              const Component: React.ElementType =
+                SectionComponents[section.__typename]
+              const isNotWrapped = isSectionNotWrapped[section.__typename]
+
+              if (!SectionComponents[section.__typename]) {
+              } else {
+                return isNotWrapped ? (
+                  <Component key={i} index={i} data={section} />
+                ) : (
+                  <StyledFullwidthSectionWrapper key={i}>
+                    <StyledSectionWrapper>
+                      <Component index={i} data={section} />
+                    </StyledSectionWrapper>
+                  </StyledFullwidthSectionWrapper>
+                )
+              }
+            })
+          : null}
+
+        {bottomSections
+          ? bottomSections.map((section, i) => {
+              const Component: React.ElementType =
+                SectionComponents[section.__typename]
+              const isNotWrapped = isSectionNotWrapped[section.__typename]
+
+              if (!SectionComponents[section.__typename]) {
+              } else {
+                return isNotWrapped ? (
+                  <Component key={i} index={i} data={section} />
+                ) : (
+                  <StyledSectionWrapper key={i}>
+                    <Component index={i} data={section} />
+                  </StyledSectionWrapper>
+                )
+              }
+            })
+          : null}
+      </Layout>
+    </AppContextProvider>
   )
 }
+
+export const query = graphql`
+  query getContentPage($id: String) {
+    contentfulPage(id: { eq: $id }) {
+      seoTitle
+      seoDescription
+      seoImage {
+        file {
+          url
+        }
+      }
+      slug
+      id
+      showNavbar
+      showFooter
+      showLanguageSelector
+      swedishLanguage
+      sections {
+        ...contentUsps
+        ...contentColumns
+        ...contentInfinitySlide
+        ...contentBigText
+        ...contentSectionCallToActionButton
+        ...contentSectionHero
+        ...contentWhatWeDo
+        ...contentOurServices
+        ...contentCompanyLogos
+        ...contentSectionCases
+        ...contentSectionCards
+        ...contentSectionRichText
+        ...contentSectionCaseFooter
+        ...contentSectionGradientBackground
+        ...contentSectionContactUs
+        ...contentSectionTwoColumnsText
+        ...contentSectionTwoColumnsTextAndMedia
+        ...contentSectionBlockquote
+        ...contentSectionSocialMedias
+        ...contentSectionFrankDealForm
+        ...contentSectionChristmasGift
+      }
+      sectionsFullwidth {
+        ...contentSectionRichText
+        ...contentSectionTwoColumnsText
+        ...contentSectionFrankDealForm
+      }
+      bottomSection {
+        ...contentSectionTwoColumnsTextAndMedia
+        ...contentColumns
+      }
+    }
+  }
+`
 export default Page
 
 // export const getStaticPaths = async () => {
